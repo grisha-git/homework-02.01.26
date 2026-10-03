@@ -2,6 +2,18 @@
 #include <unistd.h>
 #include <cassert>
 
+size_t send(int& err, int wd, const char* b, size_t k) {
+  size_t r = 0;
+  while (r < k) {
+    err = write(wd, b + r, k - r);
+    if (err < 0) {
+      break;
+    }
+    r += err;
+  }
+  return r;
+}
+
 int main () {
   int pps[2] = {};
   int err = pipe(pps);
