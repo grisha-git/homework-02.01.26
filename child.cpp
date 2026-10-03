@@ -20,6 +20,18 @@ int main(int argc, char** argv) {
   int err = 0;
   int rd = std::atoi(argv[1]);
   assert(rd > 0);
-  char p[9] = {};
-  recv(err, rd, p, 8);
+
+  char buffer[9] = {};
+  recv(err, rd, buffer, 8);
+  assert(err > 0);
+  int lineSize = std::atoi(buffer);
+  assert(lineSize > 0);
+
+  std::string msg(buffer, '\0');
+  recv(err, rd, &msg[0], lineSize);
+  assert(err >= 0);
+  err = close(rd);
+  assert(!err);
+  err = printf("%s\n", msg.c_str());
+  assert(err > 0);
 }
