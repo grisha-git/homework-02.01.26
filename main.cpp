@@ -9,6 +9,7 @@ int main () {
   int rd = pps[0], wd = pps[1];
   pid_t pid = fork();
   assert(pid >= 0);
+
   if (!pid) {
     err = close(wd);
     assert(!err);
@@ -18,6 +19,15 @@ int main () {
     execl("child", "child", p, NULL);
     assert(0);
   }
+
   err = close(rd);
   assert(!err);
+
+  std::string line;
+  std::getline(std::cin, line);
+
+  char buff[9] = {};
+  int lineSize = line.size();
+  err = sprintf(buff, "%d", lineSize);
+  assert(err > 0);
 }
