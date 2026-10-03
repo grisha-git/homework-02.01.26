@@ -1,5 +1,6 @@
 #include <iostream>
 #include <unistd.h>
+#include <sys/wait.h>
 #include <cassert>
 
 size_t send(int& err, int wd, const char* b, size_t k) {
@@ -42,4 +43,13 @@ int main () {
   int lineSize = line.size();
   err = sprintf(buff, "%d", lineSize);
   assert(err > 0);
+
+  send(err, wd, buff, 8);
+  assert(err > 0);
+  send(err, wd, line.data(), lineSize);
+  assert(err > 0);
+  err = close(wd);
+  assert(!err);
+  err = waitpid(pid, 0, 0);
+  assert(err == pid);
 }
